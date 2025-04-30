@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
@@ -8,7 +8,8 @@ import {
   SlidersHorizontal, 
   Palette, 
   Upload,
-  FileImage
+  FileImage,
+  Image
 } from "lucide-react";
 
 interface RawEditorProps {
@@ -34,6 +35,8 @@ const RawEditor = ({ imageUrl }: RawEditorProps) => {
   const [showBefore, setShowBefore] = useState(false);
   const [lutFile, setLutFile] = useState<File | null>(null);
   const [lutApplied, setLutApplied] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageError, setImageError] = useState(false);
   
   const [adjustments, setAdjustments] = useState<AdjustmentValues>({
     exposure: 0,
@@ -101,6 +104,17 @@ const RawEditor = ({ imageUrl }: RawEditorProps) => {
       title: "Adjustments reset",
       description: "All adjustments have been reset to default values.",
     });
+  };
+
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+    setImageError(false);
+  };
+
+  const handleImageError = () => {
+    setImageLoaded(false);
+    setImageError(true);
+    console.error("Failed to load image preview");
   };
 
   return (
@@ -363,12 +377,27 @@ const RawEditor = ({ imageUrl }: RawEditorProps) => {
         
         <div className="flex-1 flex items-center justify-center overflow-auto p-8 bg-[#151820]">
           <div className="relative max-w-full max-h-full">
-            <img 
-              src={imageUrl} 
-              alt="Preview" 
-              className="max-w-full max-h-[calc(100vh-12rem)] object-contain"
-              style={showBefore ? {} : getFilterStyle()}
-            />
+            {imageError ? (
+              <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-editor-border rounded-lg">
+                <Image className="w-12 h-12 text-gray-500 mb-3" />
+                <p className="text-gray-400 text-center">
+                  Unable to preview RAW file directly.
+                  <br />
+                  <span className="text-sm">
+                    In a production app, RAW files would be processed on the server.
+                  </span>
+                </p>
+              </div>
+            ) : (
+              <img 
+                src={imageUrl} 
+                alt="Preview" 
+                className="max-w-full max-h-[calc(100vh-12rem)] object-contain"
+                style={showBefore ? {} : getFilterStyle()}
+                onLoad={handleImageLoad}
+                onError={handleImageError}
+              />
+            )}
           </div>
         </div>
       </div>

@@ -23,10 +23,35 @@ const Index = () => {
 
     setImageData(file);
     
-    // For demo purposes, we're simulating RAW processing with any image
-    // In a real app, we'd use a proper RAW processing library
+    // Since browsers can't directly display ARW files, we'll use a placeholder image
+    // In a real app, we'd convert ARW to a displayable format first
+    // For demo purposes, we're using a placeholder or file object URL
     const url = URL.createObjectURL(file);
-    setPreviewUrl(url);
+    
+    // Create a canvas to show a placeholder preview (as browsers can't render RAW directly)
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = 800;
+    canvas.height = 600;
+    
+    if (ctx) {
+      // Fill with dark gray background
+      ctx.fillStyle = '#222';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Add text indicating this is a preview
+      ctx.fillStyle = '#fff';
+      ctx.font = '24px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(`Preview for: ${file.name}`, canvas.width/2, canvas.height/2);
+      ctx.fillText('(RAW file preview - actual processing in real app)', canvas.width/2, canvas.height/2 + 40);
+      
+      // Convert to data URL and use as preview
+      setPreviewUrl(canvas.toDataURL('image/jpeg'));
+    } else {
+      // Fallback to object URL if canvas context isn't available
+      setPreviewUrl(url);
+    }
     
     toast({
       title: "ARW file uploaded",

@@ -71,6 +71,9 @@ const UploadArea = ({ onFileUpload }: UploadAreaProps) => {
             onChange={handleFileChange}
           />
         </label>
+        <p className="text-xs text-gray-500 mt-4 text-center">
+          Note: This is a demo app. In a real application, RAW files would be processed server-side.
+        </p>
       </div>
     </div>
   );
