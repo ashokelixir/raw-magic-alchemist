@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import RawEditor from "@/components/RawEditor";
@@ -10,11 +11,11 @@ const Index = () => {
   const { toast } = useToast();
 
   const handleFileUpload = (file: File) => {
-    // Check if the file has an ARM extension
-    if (!file.name.toLowerCase().endsWith('.arm')) {
+    // Check if the file has an ARW extension
+    if (!file.name.toLowerCase().endsWith('.arw')) {
       toast({
         title: "Invalid file type",
-        description: "Please upload an ARM file only.",
+        description: "Please upload an ARW file only.",
         variant: "destructive",
       });
       return;
@@ -28,7 +29,7 @@ const Index = () => {
     setPreviewUrl(url);
     
     toast({
-      title: "ARM file uploaded",
+      title: "ARW file uploaded",
       description: "Your RAW image has been loaded successfully.",
     });
   };
