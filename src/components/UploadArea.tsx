@@ -60,14 +60,14 @@ const UploadArea = ({ onFileUpload }: UploadAreaProps) => {
         <p className="text-sm text-gray-400 mb-4 text-center">
           Drag and drop your ARM file here, or click to browse
           <br />
-          <span className="text-xs">(For demo purposes, any image file will work)</span>
+          <span className="text-xs">(Only ARM files are accepted)</span>
         </p>
         <label className="px-4 py-2 bg-editor-accent hover:bg-editor-accent/80 text-white rounded-md text-sm font-medium transition-colors cursor-pointer">
           Browse Files
           <input 
             type="file" 
             className="hidden" 
-            accept="image/*" 
+            accept=".arm" 
             onChange={handleFileChange}
           />
         </label>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import RawEditor from "@/components/RawEditor";
@@ -11,24 +10,26 @@ const Index = () => {
   const { toast } = useToast();
 
   const handleFileUpload = (file: File) => {
-    // In a real app, we'd process the ARM file here
-    // For demo purposes, we're just using a regular image file
-    if (!file.type.startsWith("image/")) {
+    // Check if the file has an ARM extension
+    if (!file.name.toLowerCase().endsWith('.arm')) {
       toast({
         title: "Invalid file type",
-        description: "Please upload an image file. ARM processing is simulated in this demo.",
+        description: "Please upload an ARM file only.",
         variant: "destructive",
       });
       return;
     }
 
     setImageData(file);
+    
+    // For demo purposes, we're simulating RAW processing with any image
+    // In a real app, we'd use a proper RAW processing library
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
     
     toast({
-      title: "File uploaded",
-      description: "Your image has been loaded successfully.",
+      title: "ARM file uploaded",
+      description: "Your RAW image has been loaded successfully.",
     });
   };
 
