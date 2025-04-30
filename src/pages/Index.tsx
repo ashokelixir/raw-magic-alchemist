@@ -11,11 +11,15 @@ const Index = () => {
   const { toast } = useToast();
 
   const handleFileUpload = (file: File) => {
-    // Check if the file has an ARW extension
-    if (!file.name.toLowerCase().endsWith('.arw')) {
+    // Check if the file has an acceptable extension
+    const fileName = file.name.toLowerCase();
+    const isARW = fileName.endsWith('.arw');
+    const isJPG = fileName.endsWith('.jpg') || fileName.endsWith('.jpeg');
+    
+    if (!isARW && !isJPG) {
       toast({
         title: "Invalid file type",
-        description: "Please upload an ARW file only.",
+        description: "Please upload an ARW or JPG file only.",
         variant: "destructive",
       });
       return;
@@ -23,39 +27,43 @@ const Index = () => {
 
     setImageData(file);
     
-    // Since browsers can't directly display ARW files, we'll use a placeholder image
-    // In a real app, we'd convert ARW to a displayable format first
-    // For demo purposes, we're using a placeholder or file object URL
-    const url = URL.createObjectURL(file);
-    
-    // Create a canvas to show a placeholder preview (as browsers can't render RAW directly)
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = 800;
-    canvas.height = 600;
-    
-    if (ctx) {
-      // Fill with dark gray background
-      ctx.fillStyle = '#222';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Add text indicating this is a preview
-      ctx.fillStyle = '#fff';
-      ctx.font = '24px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText(`Preview for: ${file.name}`, canvas.width/2, canvas.height/2);
-      ctx.fillText('(RAW file preview - actual processing in real app)', canvas.width/2, canvas.height/2 + 40);
-      
-      // Convert to data URL and use as preview
-      setPreviewUrl(canvas.toDataURL('image/jpeg'));
-    } else {
-      // Fallback to object URL if canvas context isn't available
+    if (isJPG) {
+      // For JPG files, we can directly create a preview URL
+      const url = URL.createObjectURL(file);
       setPreviewUrl(url);
+    } else {
+      // For ARW files, create a placeholder preview
+      // Since browsers can't directly display ARW files, we'll use a placeholder image
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = 800;
+      canvas.height = 600;
+      
+      if (ctx) {
+        // Fill with dark gray background
+        ctx.fillStyle = '#222';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Add text indicating this is a preview
+        ctx.fillStyle = '#fff';
+        ctx.font = '24px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(`Preview for: ${file.name}`, canvas.width/2, canvas.height/2);
+        ctx.fillText('(RAW file preview - actual processing in real app)', canvas.width/2, canvas.height/2 + 40);
+        
+        // Convert to data URL and use as preview
+        setPreviewUrl(canvas.toDataURL('image/jpeg'));
+      } else {
+        // Fallback to object URL if canvas context isn't available
+        const url = URL.createObjectURL(file);
+        setPreviewUrl(url);
+      }
     }
     
+    const fileType = isARW ? "ARW" : "JPG";
     toast({
-      title: "ARW file uploaded",
-      description: "Your RAW image has been loaded successfully.",
+      title: `${fileType} file uploaded`,
+      description: "Your image has been loaded successfully.",
     });
   };
 

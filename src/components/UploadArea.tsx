@@ -56,18 +56,18 @@ const UploadArea = ({ onFileUpload }: UploadAreaProps) => {
         onDrop={handleDrop}
       >
         <Upload className="w-12 h-12 text-editor-accent mb-4" />
-        <h2 className="text-xl font-medium text-white mb-2">Upload RAW Image</h2>
+        <h2 className="text-xl font-medium text-white mb-2">Upload Image</h2>
         <p className="text-sm text-gray-400 mb-4 text-center">
-          Drag and drop your ARW file here, or click to browse
+          Drag and drop your ARW or JPG file here, or click to browse
           <br />
-          <span className="text-xs">(Only ARW files are accepted)</span>
+          <span className="text-xs">(ARW and JPG files are accepted)</span>
         </p>
         <label className="px-4 py-2 bg-editor-accent hover:bg-editor-accent/80 text-white rounded-md text-sm font-medium transition-colors cursor-pointer">
           Browse Files
           <input 
             type="file" 
             className="hidden" 
-            accept=".arw" 
+            accept=".arw,.jpg,.jpeg" 
             onChange={handleFileChange}
           />
         </label>
